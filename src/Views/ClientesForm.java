@@ -194,7 +194,7 @@ public class ClientesForm extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        tblClientes.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        tblClientes.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblClientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},

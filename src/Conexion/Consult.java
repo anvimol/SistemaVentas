@@ -22,14 +22,51 @@ public class Consult extends Conexion {
     private QueryRunner QR = new QueryRunner();
 
     public List<Clientes> clientes() {
-        List<Clientes> cliente = new ArrayList();
+        String where = "";
+        List<Clientes> reportes = new ArrayList();
+        String condicion1 = " personas.id = clientes.persona_id ";
+        String campos = " personas.id, personas.nombre, personas.apellidos,"
+                + "personas.razonSocial, personas.direccion, personas.dni,"
+                + "personas.cif, personas.telefono, personas.email, personas.imagen,"
+                + "clientes.idCliente, clientes.codCliente, clientes.estado, clientes.persona_id";
         try {
-            cliente = (List<Clientes>) QR.query(getConn(), "SELECT * FROM clientes",
-                    new BeanListHandler(Clientes.class));
+            reportes = (List<Clientes>) QR.query(getConn(),
+                    "SELECT" + campos + " FROM personas INNER JOIN clientes ON"
+                    + condicion1 + where, new BeanListHandler(Clientes.class));
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e);
+        }
+        return reportes;
+    }
+    
+    public List<Persona> personas() {
+        List<Persona> persona = new ArrayList();
+        try {
+            persona = (List<Persona>) QR.query(getConn(), "SELECT * FROM personas",
+                    new BeanListHandler(Persona.class));
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error: " + ex);
         }
-        return cliente;
+        return persona;
+    }
+    
+    public List<Proveedores> proveedores() {
+        String where = "";
+        List<Proveedores> reportes = new ArrayList();
+        String condicion1 = " personas.id = proveedores.persona_id ";
+        String campos = " personas.id, personas.nombre, personas.apellidos,"
+                + "personas.razonSocial, personas.direccion, personas.dni,"
+                + "personas.cif, personas.telefono, personas.email, personas.imagen,"
+                + "proveedores.idProveedor, proveedores.codProveedor, "
+                + "proveedores.estado, proveedores.persona_id";
+        try {
+            reportes = (List<Proveedores>) QR.query(getConn(),
+                    "SELECT" + campos + " FROM personas INNER JOIN proveedores ON"
+                    + condicion1 + where, new BeanListHandler(Proveedores.class));
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e);
+        }
+        return reportes;
     }
 //
 //    public List<TReportes_clientes> reportesClientes(int idCliente) {

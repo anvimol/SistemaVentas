@@ -311,6 +311,11 @@ public class PrincipalForm extends javax.swing.JFrame {
         mnuProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/proveedores_m.png"))); // NOI18N
         mnuProveedor.setMnemonic('a');
         mnuProveedor.setText("Proveedor");
+        mnuProveedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuProveedorActionPerformed(evt);
+            }
+        });
         helpMenu.add(mnuProveedor);
 
         menuBar.add(helpMenu);
@@ -479,6 +484,12 @@ public class PrincipalForm extends javax.swing.JFrame {
         escritorio.add(producto);
         producto.show();
     }//GEN-LAST:event_mnuProductoActionPerformed
+
+    private void mnuProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuProveedorActionPerformed
+        ProveedoresForm prov=new ProveedoresForm();
+        escritorio.add(prov);
+        prov.show();
+    }//GEN-LAST:event_mnuProveedorActionPerformed
 
     /**
      * @param args the command line arguments

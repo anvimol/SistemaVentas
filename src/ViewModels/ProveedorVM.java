@@ -6,13 +6,13 @@
 package ViewModels;
 
 import Conexion.Consult;
-import Library.Encriptar;
 import Library.GenerarNumeros;
 import Library.Objetos;
 import Library.TextFieldEvent;
 import Library.UploadImage;
 import Models.Clientes;
 import Models.Persona;
+import Models.Proveedores;
 import datechooser.beans.DateChooserCombo;
 import java.awt.Color;
 import java.awt.Component;
@@ -41,43 +41,43 @@ import org.apache.commons.dbutils.handlers.ColumnListHandler;
  *
  * @author avice
  */
-public class ClienteVM extends Consult {
+public class ProveedorVM extends Consult {
 
     private UploadImage _uploadimage = new UploadImage();
     private String _accion = "insert";
     private ArrayList<JLabel> _label;
     private ArrayList<JTextField> _textfield;
-    private JTable _tablaClientes;
+    private JTable _tablaProveedores;
     private JRadioButton _radioActivo, _radioInactivo;
     private DateChooserCombo _dateChooserFecha;
     private DefaultTableModel modelo1;
     private TextFieldEvent evento = new TextFieldEvent();
-    private static int idCliente;
+    private static int idProveedor;
     private Integer totalRegistros;
-    private List<Clientes> clienteFilter;
+    private List<Proveedores> proveedorFilter;
 
-    public ClienteVM() {
+    public ProveedorVM() {
     }
 
-    public ClienteVM(Object[] objects, ArrayList<JTextField> textfield, ArrayList<JLabel> label) {
+    public ProveedorVM(Object[] objects, ArrayList<JTextField> textfield, ArrayList<JLabel> label) {
         _accion = "insert";
         _label = label;
         _textfield = textfield;
         _radioActivo = (JRadioButton) objects[0];
         _radioInactivo = (JRadioButton) objects[1];
         _dateChooserFecha = (DateChooserCombo) objects[2];
-        _tablaClientes = (JTable) objects[3];
+        _tablaProveedores = (JTable) objects[3];
         restablecer();
     }
 
-    public void registrarClientes() {
+    public void registrarProveedor() {
         if (validarDatos()) {
             int count;
-            List<Clientes> listEmail = clientes().stream()
+            List<Proveedores> listEmail = proveedores().stream()
                     .filter(u -> u.getEmail().equals(_textfield.get(7).getText()))
                     .collect(Collectors.toList());
             count = listEmail.size();
-            List<Clientes> listTelefono = clientes().stream()
+            List<Proveedores> listTelefono = proveedores().stream()
                     .filter(u -> u.getTelefono().equals(_textfield.get(6).getText()))
                     .collect(Collectors.toList());
             count += listTelefono.size();
@@ -101,16 +101,16 @@ public class ClienteVM extends Consult {
                         break;
                     case "update":
                         if (count == 2) {
-                            if (listTelefono.get(0).getId() == idCliente
-                                    && listEmail.get(0).getId() == idCliente) {
+                            if (listTelefono.get(0).getId() == idProveedor
+                                    && listEmail.get(0).getId() == idProveedor) {
                                 saveData();
                             } else {
-                                if (listEmail.get(0).getId() != idCliente) {
+                                if (listEmail.get(0).getId() != idProveedor) {
                                     JOptionPane.showMessageDialog(null, "Este email ya esta registrado",
                                             "Error", JOptionPane.ERROR_MESSAGE);
                                     _textfield.get(8).requestFocus();
                                 }
-                                if (listTelefono.get(0).getId() != idCliente) {
+                                if (listTelefono.get(0).getId() != idProveedor) {
                                     JOptionPane.showMessageDialog(null, "Este teléfono ya esta registrado",
                                             "Error", JOptionPane.ERROR_MESSAGE);
                                     _textfield.get(6).requestFocus();
@@ -121,7 +121,7 @@ public class ClienteVM extends Consult {
                                 saveData();
                             } else {
                                 if (!listEmail.isEmpty()) {
-                                    if (listEmail.get(0).getId() == idCliente) {
+                                    if (listEmail.get(0).getId() == idProveedor) {
                                         saveData();
                                     } else {
                                         JOptionPane.showMessageDialog(null, "Este email ya esta registrado",
@@ -130,7 +130,7 @@ public class ClienteVM extends Consult {
                                     }
                                 }
                                 if (!listTelefono.isEmpty()) {
-                                    if (listTelefono.get(0).getId() == idCliente) {
+                                    if (listTelefono.get(0).getId() == idProveedor) {
                                         saveData();
                                     } else {
                                         JOptionPane.showMessageDialog(null, "Este teléfono ya esta registrado",
@@ -144,7 +144,7 @@ public class ClienteVM extends Consult {
                 }
             } catch (HeadlessException e) {
             } catch (SQLException ex) {
-                Logger.getLogger(ClienteVM.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ProveedorVM.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -182,16 +182,16 @@ public class ClienteVM extends Consult {
                         image,};
                     qr.insert(getConn(), sqlPersona, new ColumnListHandler(), dataPersona);
 
-                    String sqlCli = "INSERT INTO clientes(codCliente,"
+                    String sqlProv = "INSERT INTO proveedores(codProveedor,"
                             + "estado,persona_id) VALUES(?,?,?)";
                     List<Persona> persona = personas();
 
-                    Object[] dataCli = {
+                    Object[] dataProv = {
                         _textfield.get(8).getText(),
                         estado,
                         persona.get(persona.size() - 1).getId(), // Ultima persona registrada
                     };
-                    qr.insert(getConn(), sqlCli, new ColumnListHandler(), dataCli);
+                    qr.insert(getConn(), sqlProv, new ColumnListHandler(), dataProv);
 
                     JOptionPane.showMessageDialog(null, "El registro se ha insertado correctamente",
                             "Exito", JOptionPane.INFORMATION_MESSAGE);
@@ -212,13 +212,13 @@ public class ClienteVM extends Consult {
                     };
                     String sqlPer2 = "UPDATE personas SET nombre=?, apellidos=?,"
                             + "razonSocial=?,direccion=?,dni=?,cif=?,telefono=?,"
-                            + "email=?,imagen=? WHERE id = " + idCliente;
+                            + "email=?,imagen=? WHERE id = " + idProveedor;
                     qr.update(getConn(), sqlPer2, dataPer2);
                     
                     Object[] dataCli2 = {
                         estado,
                     };
-                    String sqlCli2 = "UPDATE clientes SET estado=? WHERE persona_id = " + idCliente;
+                    String sqlCli2 = "UPDATE proveedores SET estado=? WHERE persona_id = " + idProveedor;
                     qr.update(getConn(), sqlCli2, dataCli2);
                     break;
             }
@@ -230,22 +230,22 @@ public class ClienteVM extends Consult {
         }
     }
 
-    public void searchClientes(String campo) {
+    public void searchProveedores(String campo) {
         totalRegistros = 0;
         String[] titulos = {"Id", "Nombre", "Apellidos", "Razon social", "Dirección",
-            "DNI", "CIF", "Teléfono", "Email", "Estado", "Cod. Cliente", "Imagen"};
+            "DNI", "CIF", "Teléfono", "Email", "Estado", "Cod. Proveedor", "Imagen"};
         modelo1 = new DefaultTableModel(null, titulos);
         if (campo.equals("")) {
-            clienteFilter = clientes().stream()
+            proveedorFilter = proveedores().stream()
                     .collect(Collectors.toList());
         } else {
-            clienteFilter = clientes().stream()
+            proveedorFilter = proveedores().stream()
                     .filter(u -> u.getNombre().startsWith(campo) || u.getApellidos().startsWith(campo)
                     || u.getEmail().startsWith(campo) || u.getRazonSocial().startsWith(campo))
                     .collect(Collectors.toList());
         }
-        if (!clienteFilter.isEmpty()) {
-            clienteFilter.forEach(item -> {
+        if (!proveedorFilter.isEmpty()) {
+            proveedorFilter.forEach(item -> {
                 Object[] registros = {
                     item.getId(),
                     item.getNombre(),
@@ -257,21 +257,21 @@ public class ClienteVM extends Consult {
                     item.getTelefono(),
                     item.getEmail(),
                     item.getEstado(),
-                    item.getCodCliente(),
+                    item.getCodProveedor(),
                     item.getImagen(),};
                 totalRegistros = totalRegistros + 1;
                 modelo1.addRow(registros);
             });
             _label.get(1).setText(String.valueOf(totalRegistros));
         }
-        _tablaClientes.setModel(modelo1);
+        _tablaProveedores.setModel(modelo1);
     }
 
-    public void getClientes() {
+    public void getProveedores() {
         String estado;
         _accion = "update";
-        int fila = _tablaClientes.getSelectedRow();
-        idCliente = (Integer) modelo1.getValueAt(fila, 0);
+        int fila = _tablaProveedores.getSelectedRow();
+        idProveedor = (Integer) modelo1.getValueAt(fila, 0);
         _textfield.get(0).setText((String) modelo1.getValueAt(fila, 1));
         _textfield.get(1).setText((String) modelo1.getValueAt(fila, 2));
         _textfield.get(2).setText((String) modelo1.getValueAt(fila, 3));
@@ -308,7 +308,7 @@ public class ClienteVM extends Consult {
         _textfield.get(8).setText("");
         _label.get(0).setIcon(new ImageIcon(getClass().getClassLoader()
                 .getResource("Resources/usuario.jpg")));
-        searchClientes("");
+        searchProveedores("");
         numeros();
         crearTabla();
     }
@@ -317,18 +317,18 @@ public class ClienteVM extends Consult {
         int j;
         String c = null;
         // String SQL="select count(*) from productos";
-        //String SQL = "SELECT MAX(codigo_cliente) AS cod_cli FROM cliente";
+        //String SQL = "SELECT MAX(codigo_proveedor) AS cod_cli FROM proveedor";
         //String SQL="SELECT @@identity AS ID";
-        List<Clientes> cliente = clientes();
-        if (cliente.isEmpty()) {
-            _textfield.get(8).setText("CLI-00000001");
+        List<Proveedores> proveedor = proveedores();
+        if (proveedor.isEmpty()) {
+            _textfield.get(8).setText("PRO-00000001");
         } else {
-            j = cliente.get(cliente.size() - 1).getIdCliente();
-            c = cliente.get(j - 1).getCodCliente();
+            j = proveedor.get(proveedor.size() - 1).getIdProveedor();
+            c = proveedor.get(j - 1).getCodProveedor();
         }
 
         if (c == null) {
-            _textfield.get(8).setText("CLI-00000001");
+            _textfield.get(8).setText("PRO-00000001");
         } else {
             char r1 = c.charAt(4);
             char r2 = c.charAt(5);
@@ -343,7 +343,7 @@ public class ClienteVM extends Consult {
             int var = Integer.parseInt(juntar);
             //System.out.print("\n este lo que vale numericamente" + var);
             GenerarNumeros gen = new GenerarNumeros();
-            gen.generar(var);
+            gen.generarPro(var);
 
             _textfield.get(8).setText(gen.serie());
 
@@ -352,37 +352,37 @@ public class ClienteVM extends Consult {
 
     private boolean validarDatos() {
         if (_textfield.get(0).getText().equals("") && _textfield.get(2).getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Ingrese el nombre o la razón social del cliente",
+            JOptionPane.showMessageDialog(null, "Ingrese el nombre o la razón social del proveedor",
                     "Error", JOptionPane.ERROR_MESSAGE);
             _textfield.get(0).requestFocus();
             return false;
         } else if (!_textfield.get(0).getText().equals("") && _textfield.get(1).getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Ingrese los apellidos del cliente",
+            JOptionPane.showMessageDialog(null, "Ingrese los apellidos del proveedor",
                     "Error", JOptionPane.ERROR_MESSAGE);
             _textfield.get(1).requestFocus();
             return false;
         } else if (_textfield.get(3).getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Ingrese la dirección del cliente",
+            JOptionPane.showMessageDialog(null, "Ingrese la dirección del proveedor",
                     "Error", JOptionPane.ERROR_MESSAGE);
             _textfield.get(3).requestFocus();
             return false;
         } else if (_textfield.get(4).getText().equals("") && !_textfield.get(0).getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Ingrese el DNI del cliente",
+            JOptionPane.showMessageDialog(null, "Ingrese el DNI del proveedor",
                     "Error", JOptionPane.ERROR_MESSAGE);
             _textfield.get(4).requestFocus();
             return false;
         } else if (_textfield.get(0).getText().equals("") && _textfield.get(5).getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Ingrese el CIF del cliente",
+            JOptionPane.showMessageDialog(null, "Ingrese el CIF del proveedor",
                     "Error", JOptionPane.ERROR_MESSAGE);
             _textfield.get(5).requestFocus();
             return false;
         } else if (_textfield.get(6).getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Ingrese el teléfono del cliente",
+            JOptionPane.showMessageDialog(null, "Ingrese el teléfono del proveedor",
                     "Error", JOptionPane.ERROR_MESSAGE);
             _textfield.get(6).requestFocus();
             return false;
         } else if (_textfield.get(7).getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Ingrese el email del cliente",
+            JOptionPane.showMessageDialog(null, "Ingrese el email del proveedor",
                     "Error", JOptionPane.ERROR_MESSAGE);
             _textfield.get(8).requestFocus();
             return false;
@@ -429,37 +429,37 @@ public class ClienteVM extends Consult {
             }
         };
         //Agregar Render
-        for (int i = 0; i < _tablaClientes.getColumnCount(); i++) {
-            _tablaClientes.getColumnModel().getColumn(i).setCellRenderer(render);
+        for (int i = 0; i < _tablaProveedores.getColumnCount(); i++) {
+            _tablaProveedores.getColumnModel().getColumn(i).setCellRenderer(render);
         }
 
         //Activar ScrollBar
-        _tablaClientes.setAutoResizeMode(_tablaClientes.AUTO_RESIZE_OFF);
+        _tablaProveedores.setAutoResizeMode(_tablaProveedores.AUTO_RESIZE_OFF);
 
         // Encabezados
-        _tablaClientes.getTableHeader().setFont(new Font("Cooper Black", 1, 14));
+        _tablaProveedores.getTableHeader().setFont(new Font("Cooper Black", 1, 14));
 // cambia el fondo del encabezado de la _tablaUsuarios
-        _tablaClientes.getTableHeader().setBackground(new Color(0, 51, 102));
+        _tablaProveedores.getTableHeader().setBackground(new Color(0, 51, 102));
 // cambia el color de la letra del encabezado de la _tablaUsuarios
-        _tablaClientes.getTableHeader().setForeground(Color.white);
+        _tablaProveedores.getTableHeader().setForeground(Color.white);
 
         //Anchos de cada columna
-        int[] anchos = {10, 150, 150, 200, 200, 100, 100, 100, 200, 100, 100, 100, 100};
-        for (int i = 0; i < _tablaClientes.getColumnCount(); i++) {
-            _tablaClientes.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+        int[] anchos = {10, 150, 150, 200, 200, 100, 100, 100, 200, 100, 120, 100, 100};
+        for (int i = 0; i < _tablaProveedores.getColumnCount(); i++) {
+            _tablaProveedores.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
         }
         //Altos de cada fila
-        _tablaClientes.setRowHeight(30);
+        _tablaProveedores.setRowHeight(30);
         ocultarColumnas();
     }
 
     private void ocultarColumnas() {
-        _tablaClientes.setRowHeight(30);
-        _tablaClientes.getColumnModel().getColumn(0).setMaxWidth(0);
-        _tablaClientes.getColumnModel().getColumn(0).setMinWidth(0);
-        _tablaClientes.getColumnModel().getColumn(0).setPreferredWidth(0);
-        _tablaClientes.getColumnModel().getColumn(11).setMaxWidth(0);
-        _tablaClientes.getColumnModel().getColumn(11).setMinWidth(0);
-        _tablaClientes.getColumnModel().getColumn(11).setPreferredWidth(0);
+        _tablaProveedores.setRowHeight(30);
+        _tablaProveedores.getColumnModel().getColumn(0).setMaxWidth(0);
+        _tablaProveedores.getColumnModel().getColumn(0).setMinWidth(0);
+        _tablaProveedores.getColumnModel().getColumn(0).setPreferredWidth(0);
+        _tablaProveedores.getColumnModel().getColumn(11).setMaxWidth(0);
+        _tablaProveedores.getColumnModel().getColumn(11).setMinWidth(0);
+        _tablaProveedores.getColumnModel().getColumn(11).setPreferredWidth(0);
     }
 }

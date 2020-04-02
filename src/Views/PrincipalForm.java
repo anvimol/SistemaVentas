@@ -5,6 +5,7 @@
  */
 package Views;
 
+import Consultas.ComprasRealizadasForm;
 import Library.Calendario;
 import Models.Usuarios;
 import ViewModels.LoginVM;
@@ -21,6 +22,7 @@ public class PrincipalForm extends javax.swing.JFrame {
 
     private LoginVM login;
     private UsuariosVM usuario;
+    public String nombreEmpleado;
 
     /**
      * Creates new form PrincipalForm
@@ -34,10 +36,11 @@ public class PrincipalForm extends javax.swing.JFrame {
         Object[] perfil = {
             LabelNombrePerfil,
             LabelUsuarioPerfil,
-            LabelRolePerfil
+            LabelRolePerfil,
+            LabelIdPerfil
         };
         usuario = new UsuariosVM(dataUsuario, perfil);
-        
+
         String fecha = new Calendario().getFecha();
         LabelFechaPerfil.setText(fecha);
     }
@@ -72,6 +75,7 @@ public class PrincipalForm extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         LabelFechaPerfil = new javax.swing.JLabel();
         LabelRolePerfil = new javax.swing.JLabel();
+        LabelIdPerfil = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         mnuArchivo = new javax.swing.JMenu();
         mnuIniciarSesion = new javax.swing.JMenuItem();
@@ -87,7 +91,14 @@ public class PrincipalForm extends javax.swing.JFrame {
         mnuVenta = new javax.swing.JMenuItem();
         mnuVerificarProd = new javax.swing.JMenuItem();
         mnuCliente = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        mnuConsultas = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        mnuCompraRealizada = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
+        jMenuItem7 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
         jMenu5 = new javax.swing.JMenu();
@@ -101,7 +112,7 @@ public class PrincipalForm extends javax.swing.JFrame {
         escritorio.setLayout(escritorioLayout);
         escritorioLayout.setHorizontalGroup(
             escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 1044, Short.MAX_VALUE)
         );
         escritorioLayout.setVerticalGroup(
             escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -238,6 +249,10 @@ public class PrincipalForm extends javax.swing.JFrame {
         LabelRolePerfil.setForeground(new java.awt.Color(255, 255, 255));
         LabelRolePerfil.setText("Role");
 
+        LabelIdPerfil.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        LabelIdPerfil.setForeground(new java.awt.Color(255, 255, 255));
+        LabelIdPerfil.setText("0");
+
         menuBar.setBackground(new java.awt.Color(255, 255, 255));
 
         mnuArchivo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/archivo.png"))); // NOI18N
@@ -350,9 +365,43 @@ public class PrincipalForm extends javax.swing.JFrame {
 
         menuBar.add(jMenu1);
 
-        jMenu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/consultas.png"))); // NOI18N
-        jMenu2.setText("Consultas");
-        menuBar.add(jMenu2);
+        mnuConsultas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/consultas.png"))); // NOI18N
+        mnuConsultas.setText("Consultas");
+
+        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/ventasrealizadas.png"))); // NOI18N
+        jMenuItem1.setText("Ventas Realizadas");
+        mnuConsultas.add(jMenuItem1);
+
+        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/ventasdetalladas.png"))); // NOI18N
+        jMenuItem2.setText("Ventas Detalladas");
+        mnuConsultas.add(jMenuItem2);
+
+        jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/estadisticamensual.png"))); // NOI18N
+        jMenuItem3.setText("Estadistica Mensual");
+        mnuConsultas.add(jMenuItem3);
+
+        mnuCompraRealizada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/comprasrealizadas.png"))); // NOI18N
+        mnuCompraRealizada.setText("Compras Realizadas");
+        mnuCompraRealizada.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuCompraRealizadaActionPerformed(evt);
+            }
+        });
+        mnuConsultas.add(mnuCompraRealizada);
+
+        jMenuItem5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/comprasdetalladas.png"))); // NOI18N
+        jMenuItem5.setText("Compras Detalladas");
+        mnuConsultas.add(jMenuItem5);
+
+        jMenuItem6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/report.png"))); // NOI18N
+        jMenuItem6.setText("Stock Mínimo");
+        mnuConsultas.add(jMenuItem6);
+
+        jMenuItem7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/coins_add.png"))); // NOI18N
+        jMenuItem7.setText("Kardex Valorizado");
+        mnuConsultas.add(jMenuItem7);
+
+        menuBar.add(mnuConsultas);
 
         jMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/Mantenimiento.png"))); // NOI18N
         jMenu3.setText("Mantenimiento");
@@ -380,17 +429,19 @@ public class PrincipalForm extends javax.swing.JFrame {
             .addComponent(TBPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(LabelIdPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34)
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(LabelNombrePerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(LabelUsuarioPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(LabelUsuarioPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(LabelRolePerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
-                .addComponent(LabelFechaPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(LabelRolePerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(LabelFechaPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12))
         );
         layout.setVerticalGroup(
@@ -406,7 +457,8 @@ public class PrincipalForm extends javax.swing.JFrame {
                     .addComponent(LabelFechaPerfil)
                     .addComponent(LabelRolePerfil)
                     .addComponent(jLabel10)
-                    .addComponent(LabelNombrePerfil))
+                    .addComponent(LabelNombrePerfil)
+                    .addComponent(LabelIdPerfil))
                 .addContainerGap())
         );
 
@@ -424,7 +476,7 @@ public class PrincipalForm extends javax.swing.JFrame {
     }//GEN-LAST:event_mbtnEmpleadoActionPerformed
 
     private void mbtnClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mbtnClienteActionPerformed
-        ClientesForm cliente=new ClientesForm();
+        ClientesForm cliente = new ClientesForm();
         escritorio.add(cliente);
         cliente.show();
     }//GEN-LAST:event_mbtnClienteActionPerformed
@@ -436,11 +488,11 @@ public class PrincipalForm extends javax.swing.JFrame {
     }//GEN-LAST:event_mbtnProductoActionPerformed
 
     private void mbtnCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mbtnCompraActionPerformed
-//        Presentacion.FrmCompra compra=new Presentacion.FrmCompra();
-//        Escritorio.add(compra);
-//        compra.show();
+        ComprasForm compra = new ComprasForm();
+        escritorio.add(compra);
+        compra.show();
 //        compra.IdEmpleado=lblIdEmpleado.getText();
-//        compra.NombreEmpleado=lblNombreEmpleado.getText();
+        compra.nombreEmpleado = LabelUsuarioPerfil.getText();
     }//GEN-LAST:event_mbtnCompraActionPerformed
 
     private void mbtnVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mbtnVentaActionPerformed
@@ -474,7 +526,7 @@ public class PrincipalForm extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuCategoriaActionPerformed
 
     private void mnuClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuClienteActionPerformed
-        ClientesForm cliente=new ClientesForm();
+        ClientesForm cliente = new ClientesForm();
         escritorio.add(cliente);
         cliente.show();
     }//GEN-LAST:event_mnuClienteActionPerformed
@@ -486,10 +538,16 @@ public class PrincipalForm extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuProductoActionPerformed
 
     private void mnuProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuProveedorActionPerformed
-        ProveedoresForm prov=new ProveedoresForm();
+        ProveedoresForm prov = new ProveedoresForm();
         escritorio.add(prov);
         prov.show();
     }//GEN-LAST:event_mnuProveedorActionPerformed
+
+    private void mnuCompraRealizadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCompraRealizadaActionPerformed
+        ComprasRealizadasForm compra = new ComprasRealizadasForm();
+        escritorio.add(compra);
+        compra.show();
+    }//GEN-LAST:event_mnuCompraRealizadaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -528,12 +586,13 @@ public class PrincipalForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel LabelFechaPerfil;
+    public static javax.swing.JLabel LabelIdPerfil;
     private javax.swing.JLabel LabelNombrePerfil;
-    private javax.swing.JLabel LabelRolePerfil;
-    private javax.swing.JLabel LabelUsuarioPerfil;
+    public static javax.swing.JLabel LabelRolePerfil;
+    public static javax.swing.JLabel LabelUsuarioPerfil;
     private javax.swing.JToolBar TBPrincipal;
     private javax.swing.JMenu editMenu;
-    private javax.swing.JDesktopPane escritorio;
+    public static javax.swing.JDesktopPane escritorio;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -544,11 +603,16 @@ public class PrincipalForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenu6;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JButton mbtnCaja;
     private javax.swing.JButton mbtnCliente;
     private javax.swing.JButton mbtnCompra;
@@ -562,6 +626,8 @@ public class PrincipalForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem mnuCerrarSesion;
     private javax.swing.JMenuItem mnuCliente;
     private javax.swing.JMenuItem mnuCompra;
+    private javax.swing.JMenuItem mnuCompraRealizada;
+    private javax.swing.JMenu mnuConsultas;
     private javax.swing.JMenuItem mnuIniciarSesion;
     private javax.swing.JMenuItem mnuProducto;
     private javax.swing.JMenuItem mnuProveedor;

@@ -45,6 +45,7 @@ public class ProductosForm extends javax.swing.JInternalFrame {
         ArrayList<JLabel> label = new ArrayList();
         label.add(lblImagenBarras);
         label.add(lblImagenProducto);
+        label.add(lblTotalRegistros);
 
         ArrayList<JTextField> textfield = new ArrayList();
         textfield.add(txtBusquedaProductos);
@@ -96,6 +97,8 @@ public class ProductosForm extends javax.swing.JInternalFrame {
                 return false; // Disallow the editing of any cell
             }
         };
+        lblTotalRegistros = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         txtCodigoBarProdu = new javax.swing.JTextField();
@@ -207,6 +210,12 @@ public class ProductosForm extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(tblProductos);
 
+        lblTotalRegistros.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblTotalRegistros.setText("0");
+
+        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel14.setText("Registros:");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -228,6 +237,12 @@ public class ProductosForm extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane1)
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel14)
+                .addGap(18, 18, 18)
+                .addComponent(lblTotalRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -244,8 +259,12 @@ public class ProductosForm extends javax.swing.JInternalFrame {
                         .addComponent(txtBusquedaProductos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 551, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel14)
+                    .addComponent(lblTotalRegistros))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         TabbedPaneProductos.addTab("Buscar", jPanel2);
@@ -829,6 +848,7 @@ public class ProductosForm extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -845,6 +865,7 @@ public class ProductosForm extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblImagenBarras;
     private javax.swing.JLabel lblImagenProducto;
+    private javax.swing.JLabel lblTotalRegistros;
     private javax.swing.JPanel panel;
     private javax.swing.JRadioButton rbtActivoProdu;
     private javax.swing.JRadioButton rbtCategoriaProdu;

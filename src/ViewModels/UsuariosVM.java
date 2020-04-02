@@ -48,7 +48,7 @@ public class UsuariosVM extends Consult {
 
     private static Usuarios _dataUsuario;
     private static JLabel _nombrePerfil, _usuarioPerfil;
-    private static JLabel _rolePerfil;
+    private static JLabel _rolePerfil, _idPerfil;
     private UploadImage _uploadimage = new UploadImage();
     private String _accion = "insert";
     private ArrayList<JLabel> _label;
@@ -86,6 +86,7 @@ public class UsuariosVM extends Consult {
         _nombrePerfil = (JLabel) perfil[0];
         _usuarioPerfil = (JLabel) perfil[1];
         _rolePerfil = (JLabel) perfil[2];
+        _idPerfil = (JLabel) perfil[3];
         Perfil();
     }
 
@@ -93,6 +94,7 @@ public class UsuariosVM extends Consult {
         _nombrePerfil.setText(_dataUsuario.getNombre());
         _usuarioPerfil.setText(_dataUsuario.getUsuario());
         _rolePerfil.setText(_dataUsuario.getRole());
+        _idPerfil.setText(String.valueOf(_dataUsuario.getIdUsuario()));
     }
 
     public void registrarUsuarios() {

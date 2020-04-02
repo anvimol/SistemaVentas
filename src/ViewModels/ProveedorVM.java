@@ -56,7 +56,9 @@ public class ProveedorVM extends Consult {
     private Integer totalRegistros;
     private List<Proveedores> proveedorFilter;
 
-    public ProveedorVM() {
+    public ProveedorVM(Object[] objects, ArrayList<JLabel> label) {
+        _label = label;
+        _tablaProveedores = (JTable) objects[0];
     }
 
     public ProveedorVM(Object[] objects, ArrayList<JTextField> textfield, ArrayList<JLabel> label) {
@@ -262,7 +264,7 @@ public class ProveedorVM extends Consult {
                 totalRegistros = totalRegistros + 1;
                 modelo1.addRow(registros);
             });
-            _label.get(1).setText(String.valueOf(totalRegistros));
+            _label.get(0).setText(String.valueOf(totalRegistros));
         }
         _tablaProveedores.setModel(modelo1);
     }
@@ -291,7 +293,7 @@ public class ProveedorVM extends Consult {
             _radioInactivo.setSelected(true);
         }
 
-        Objetos.uploadImage.byteImage(_label.get(0), (byte[]) modelo1.getValueAt(fila, 11),
+        Objetos.uploadImage.byteImage(_label.get(1), (byte[]) modelo1.getValueAt(fila, 11),
                 235, 318);
     }
 
@@ -306,7 +308,7 @@ public class ProveedorVM extends Consult {
         _textfield.get(6).setText("");
         _textfield.get(7).setText("");
         _textfield.get(8).setText("");
-        _label.get(0).setIcon(new ImageIcon(getClass().getClassLoader()
+        _label.get(1).setIcon(new ImageIcon(getClass().getClassLoader()
                 .getResource("Resources/usuario.jpg")));
         searchProveedores("");
         numeros();
@@ -444,7 +446,7 @@ public class ProveedorVM extends Consult {
         _tablaProveedores.getTableHeader().setForeground(Color.white);
 
         //Anchos de cada columna
-        int[] anchos = {10, 150, 150, 200, 200, 100, 100, 100, 200, 100, 120, 100, 100};
+        int[] anchos = {50, 150, 150, 200, 200, 100, 100, 100, 200, 100, 120, 100, 100};
         for (int i = 0; i < _tablaProveedores.getColumnCount(); i++) {
             _tablaProveedores.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
         }

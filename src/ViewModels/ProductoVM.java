@@ -58,13 +58,13 @@ import org.apache.commons.dbutils.handlers.ColumnListHandler;
 public class ProductoVM extends Consult {
 
     private String _accion = "insert";
-    private final ArrayList<JLabel> _label;
-    private final ArrayList<JTextField> _textfield;
-    private final ArrayList<JTextArea> _textarea;
-    private final JRadioButton _radioCodigo, _radioNombre, _radioCategoria;
-    private final JRadioButton _radioActivo, _radioInactivo;
-    private final JTable _tablaProductos;
-    private final JComboBox _comboCategoria, _comboDepartamentos;
+    private ArrayList<JLabel> _label;
+    private ArrayList<JTextField> _textfield;
+    private ArrayList<JTextArea> _textarea;
+    private JRadioButton _radioCodigo, _radioNombre, _radioCategoria;
+    private JRadioButton _radioActivo, _radioInactivo;
+    private JTable _tablaProductos;
+    private JComboBox _comboCategoria, _comboDepartamentos;
     private Integer idProducto, totalRegistros;
     private DefaultTableModel modelo1;
     private DefaultComboBoxModel modelCombo;
@@ -76,6 +76,14 @@ public class ProductoVM extends Consult {
     private Departamentos dpt = null;
     private int idDpto;
     private Categorias cat = null;
+
+    public ProductoVM() {
+    }
+
+    public ProductoVM(Object[] objects, ArrayList<JLabel> label) {
+        _tablaProductos = (JTable) objects[0];
+        _label = label;
+    }
 
     public ProductoVM(Object[] objects, ArrayList<JLabel> label,
             ArrayList<JTextField> textfield, ArrayList<JTextArea> textarea) {
@@ -247,6 +255,7 @@ public class ProductoVM extends Consult {
     }
 
     public void searchProducto(String campo) {
+        totalRegistros = 0;
         String[] titulos = {"Id", "Código", "Nombre", "Descripcion", "Stock", "StockMin",
             "Precio costo", "Precio venta", "Utilidad", "Estado", "Departamento",
             "Categoria", "Imagen"};
@@ -278,18 +287,12 @@ public class ProductoVM extends Consult {
                     item.getCategoria(),
                     item.getImagen()
                 };
+                totalRegistros = totalRegistros + 1;
                 modelo1.addRow(registros);
             });
+            _label.get(0).setText(String.valueOf(totalRegistros));
         }
         _tablaProductos.setModel(modelo1);
-//        _tablaProductos.setRowHeight(30);
-//        _tablaProductos.getColumnModel().getColumn(0).setMaxWidth(0);
-//        _tablaProductos.getColumnModel().getColumn(0).setMinWidth(0);
-//        _tablaProductos.getColumnModel().getColumn(0).setPreferredWidth(0);
-//        _tablaProductos.getColumnModel().getColumn(12).setMaxWidth(0);
-//        _tablaProductos.getColumnModel().getColumn(12).setMinWidth(0);
-//        _tablaProductos.getColumnModel().getColumn(12).setPreferredWidth(0);
-        //_tablaProductos.getColumnModel().getColumn(7).setCellRenderer(new Render_CheckBox());
     }
 
     private void buscarPorCampo(String campo) {
@@ -340,6 +343,13 @@ public class ProductoVM extends Consult {
         Objetos.uploadImage.byteImage(_label.get(1), (byte[]) modelo1.getValueAt(fila, 12),
                 260, 300);
         codigo(_label.get(0), _textfield.get(1).getText());
+    }
+
+    public String getStockProducto(int id) {
+        productoFilter = stock(id).stream()
+                .collect(Collectors.toList());
+        String stock = productoFilter.toString();
+        return stock;
     }
 
     public Departamentos getDepartamento(JComboBox combo, String departa) {

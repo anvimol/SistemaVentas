@@ -26,8 +26,8 @@ public class ProveedoresForm extends javax.swing.JInternalFrame {
         initComponents();
 
         ArrayList<JLabel> label = new ArrayList();
-        label.add(lblImagenProveedor);
         label.add(lblTotalRegistros);
+        label.add(lblImagenProveedor);
 
         ArrayList<JTextField> textfield = new ArrayList();
         textfield.add(txtNombreProveedor);

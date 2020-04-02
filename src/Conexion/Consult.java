@@ -21,6 +21,20 @@ public class Consult extends Conexion {
 
     private QueryRunner QR = new QueryRunner();
 
+    public void delete(String sql, int id) {
+        final QueryRunner qr = new QueryRunner(true);
+
+        try {
+            if (0 < id) {
+                qr.update(getConn(), sql, "%" + id + "%");
+            } else {
+                qr.update(getConn(), sql);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error: " + ex);
+        }
+    }
+
     public List<Clientes> clientes() {
         String where = "";
         List<Clientes> reportes = new ArrayList();
@@ -38,7 +52,7 @@ public class Consult extends Conexion {
         }
         return reportes;
     }
-    
+
     public List<Persona> personas() {
         List<Persona> persona = new ArrayList();
         try {
@@ -49,7 +63,7 @@ public class Consult extends Conexion {
         }
         return persona;
     }
-    
+
     public List<Proveedores> proveedores() {
         String where = "";
         List<Proveedores> reportes = new ArrayList();
@@ -94,8 +108,9 @@ public class Consult extends Conexion {
 //        return reportes;
 //    }
 //
+
     public List<Departamentos> departamentos() {
-            List<Departamentos> departamentos = new ArrayList<>();
+        List<Departamentos> departamentos = new ArrayList<>();
         try {
             departamentos = (List<Departamentos>) QR.query(getConn(), "SELECT * FROM departamentos",
                     new BeanListHandler(Departamentos.class));
@@ -126,7 +141,19 @@ public class Consult extends Conexion {
         }
         return producto;
     }
-    
+
+    public List<Productos> stock(int id) {
+        List<Productos> producto = new ArrayList();
+        try {
+            producto = (List<Productos>) QR.query(getConn(), "SELECT stock "
+                    + "FROM productos WHERE id=" + id,
+                    new BeanListHandler(Productos.class));
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e);
+        }
+        return producto;
+    }
+
     public List<Usuarios> usuarios() {
         List<Usuarios> usuarios = new ArrayList();
         try {
@@ -137,7 +164,7 @@ public class Consult extends Conexion {
         }
         return usuarios;
     }
-    
+
     public List<Roles> roles() {
         List<Roles> rol = new ArrayList();
         try {
@@ -148,6 +175,72 @@ public class Consult extends Conexion {
         }
         return rol;
     }
+
+    public List<TempoCompras> tempoCompras() {
+        List<TempoCompras> tempoCompras = new ArrayList<>();
+        try {
+            tempoCompras = (List<TempoCompras>) QR.query(getConn(), "SELECT * FROM tempo_compras",
+                    new BeanListHandler(TempoCompras.class));
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error: " + ex);
+        }
+        return tempoCompras;
+    }
+
+    public List<DetallesCompras> detalleCompras() {
+        List<DetallesCompras> compra = new ArrayList();
+        try {
+            compra = (List<DetallesCompras>) QR.query(getConn(), "SELECT * FROM detalles_compras",
+                    new BeanListHandler(DetallesCompras.class));
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error: " + ex);
+        }
+        return compra;
+    }
+
+    public List<Compras> compras1() {
+        List<Compras> compra = new ArrayList();
+        try {
+            compra = (List<Compras>) QR.query(getConn(), "SELECT * FROM compras",
+                    new BeanListHandler(Compras.class));
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error: " + ex);
+        }
+        return compra;
+    }
+
+    public List<Compras> compras() {
+        String where = "";
+        List<Compras> compra = new ArrayList();
+        String condicion = " compras.idCompra = detalles_compras.compra_id ";
+        String campos = " compras.idCompra, compras.numCompra, compras.usuario,"
+                + "compras.role, detalles_compras.proveedor,"
+                + "detalles_compras.fecha, detalles_compras.usuario, detalles_compras.role,"
+                + "compras.totalPagar, detalles_compras.codigoCompra, detalles_compras.compra_id";
+        try {
+            compra = (List<Compras>) QR.query(getConn(), "SELECT" + campos
+                    + " FROM compras INNER JOIN detalles_compras ON"
+                    + condicion + where, new BeanListHandler(Compras.class));
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error: " + ex);
+        }
+        return compra;
+    }
+
+    public List<Compras> comprasFechas(String fecha1, String fecha2) {
+        List<Compras> compra = new ArrayList();
+        try {
+            compra = (List<Compras>) QR.query(getConn(), "SELECT * FROM compras "
+                    + "WHERE fecha BETWEEN CAST('" + fecha1 + "' AS DATE) "
+                    + "AND CAST('" + fecha2 + "' AS DATE)",
+                    new BeanListHandler(Compras.class));
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error: " + ex);
+        }
+        return compra;
+    }
+
 //    
 //    public List<TIntereses_clientes> interesesClientes() {
 //        List<TIntereses_clientes> intereses = new ArrayList();
